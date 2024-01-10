@@ -12,6 +12,9 @@ public class UserServiceImpl implements UserService {
                            String email,
                            String password,
                            String repeatedPassword) {
+        if (firstName == null || firstName.trim().isEmpty()) {
+            throw new IllegalArgumentException("User's first name is empty");
+        }
 
         return new User(firstName, lastName, email, UUID.randomUUID().toString());
     }

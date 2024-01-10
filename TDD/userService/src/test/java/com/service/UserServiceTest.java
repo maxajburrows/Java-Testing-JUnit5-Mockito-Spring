@@ -5,8 +5,7 @@ import com.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserServiceTest {
 
@@ -30,5 +29,26 @@ public class UserServiceTest {
         assertEquals(lastName, user.getLastName(), "User's last name isn't correct");
         assertEquals(email, user.getEmail(), "User's email isn't correct");
         assertNotNull(user.getId(), "User id is missing");
+    }
+
+    @DisplayName("Empty first name causes correct exception")
+    @Test
+    void testCreateUser_whenFirstNameIsEmpty_throwsIllegalArgumentException() {
+        // Arrange
+        UserService userService = new UserServiceImpl();
+        String firstName = "";
+        String lastName = "Kargopolov";
+        String email = "test@test.com";
+        String password = "12345678";
+        String repeatedPassword = "12345678";
+        String expectedExceptionMessage = "User's first name is empty";
+
+        // Act & Assert
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            userService.createUser(firstName, lastName, email, password, repeatedPassword);
+        }, "Empty first name should have caused an Illegal Argument Exception");
+
+        // Assert
+        assertEquals(expectedExceptionMessage, thrown.getMessage(), "Exception error message is not correct");
     }
 }
