@@ -72,4 +72,6 @@ public class UserServiceTest {
 
         assertEquals(expectedExceptionMessage, thrown.getMessage(), "Exception error message is not correct");
     }
+
+
 }
