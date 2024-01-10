@@ -10,7 +10,7 @@ public class UserServiceImpl implements UserService {
                            String email,
                            String password,
                            String repeatedPassword) {
-        return new User();
 
+        return new User(firstName);
     }
 }
