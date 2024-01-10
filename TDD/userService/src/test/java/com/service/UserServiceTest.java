@@ -29,5 +29,6 @@ public class UserServiceTest {
         assertEquals(firstName, user.getFirstName(), "User's first name isn't correct");
         assertEquals(lastName, user.getLastName(), "User's last name isn't correct");
         assertEquals(email, user.getEmail(), "User's email isn't correct");
+        assertNotNull(user.getId(), "User id is missing");
     }
 }
