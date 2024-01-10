@@ -2,6 +2,7 @@ package com.service;
 
 import com.model.User;
 import com.service.UserService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class UserServiceTest {
 
+    @DisplayName("User object created")
     @Test
     void testCreateUser_whenUserDetailsProvided_returnsUserObject() {
         // Arrange
@@ -24,23 +26,6 @@ public class UserServiceTest {
 
         // Assert
         assertNotNull(user, "The createUser() method should not have returned null");
-    }
-
-    @Test
-    void testCreateUser_whenUserCreated_returnedUserObjectContainsSameFirstName() {
-
-        // Arrange
-        UserService userService = new UserServiceImpl();
-        String firstName = "Sergey";
-        String lastName = "Kargopolov";
-        String email = "test@test.com";
-        String password = "12345678";
-        String repeatedPassword = "12345678";
-
-        // Act
-        User user = userService.createUser(firstName, lastName, email, password, repeatedPassword);
-
-        // Assert
-        assertEquals(firstName, user.getFirstName());
+        assertEquals(firstName, user.getFirstName(), "User's first name isn't correct");
     }
 }
