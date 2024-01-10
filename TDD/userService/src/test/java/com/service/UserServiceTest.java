@@ -57,4 +57,19 @@ public class UserServiceTest {
         // Assert
         assertEquals(expectedExceptionMessage, thrown.getMessage(), "Exception error message is not correct");
     }
+
+    @DisplayName("Empty last name causes correct exception")
+    @Test
+    void testCreateUser_whenLastNameIsEmpty_throwsIllegalArgumentException() {
+        // Arrange
+        lastName = null;
+        String expectedExceptionMessage = "User's last name is empty";
+
+        // Act & Assert
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            userService.createUser(firstName, lastName, email, password, repeatedPassword);
+        }, "Empty last name should have caused Illegal Argument Exception");
+
+        assertEquals(expectedExceptionMessage, thrown.getMessage(), "Exception error message is not correct");
+    }
 }
