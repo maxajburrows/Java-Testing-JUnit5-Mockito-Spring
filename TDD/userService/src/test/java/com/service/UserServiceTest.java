@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,6 +41,9 @@ public class UserServiceTest {
     @DisplayName("User object created")
     @Test
     void testCreateUser_whenUserDetailsProvided_returnsUserObject() {
+        // Arrange
+        Mockito.when(usersRepository.save(Mockito.any(User.class))).thenReturn(true);
+
         // Act
         User user = userService.createUser(firstName, lastName, email, password, repeatedPassword);
 
