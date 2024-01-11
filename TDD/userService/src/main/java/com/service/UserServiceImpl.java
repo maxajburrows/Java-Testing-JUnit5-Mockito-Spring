@@ -1,10 +1,17 @@
 package com.service;
 
+import com.data.UsersRepository;
 import com.model.User;
 
 import java.util.UUID;
 
 public class UserServiceImpl implements UserService {
+
+    UsersRepository usersRepository;
+
+    public UserServiceImpl(UsersRepository usersRepository) {
+        this.usersRepository = usersRepository;
+    }
 
     @Override
     public User createUser(String firstName,
@@ -23,7 +30,13 @@ public class UserServiceImpl implements UserService {
 
         User user = new User(firstName, lastName, email, UUID.randomUUID().toString());
 
-        userRepository.save(user);
+        boolean isUserCreated = usersRepository.save(user);
+        
+        if (!isUserCreated) {
+            throw new UserServiceException("Could not create user");
+        }
         return user;
     }
+
+
 }
