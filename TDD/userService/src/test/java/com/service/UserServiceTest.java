@@ -43,7 +43,7 @@ public class UserServiceTest {
     @Test
     void testCreateUser_whenUserDetailsProvided_returnsUserObject() {
         // Arrange
-        Mockito.when(usersRepository.save(any(User.class))).thenReturn(true);
+        when(usersRepository.save(any(User.class))).thenReturn(true);
 
         // Act
         User user = userService.createUser(firstName, lastName, email, password, repeatedPassword);
@@ -87,6 +87,20 @@ public class UserServiceTest {
         }, "Empty last name should have caused Illegal Argument Exception");
 
         assertEquals(expectedExceptionMessage, thrown.getMessage(), "Exception error message is not correct");
+    }
+
+    @DisplayName(("If save() method causes RuntimeException, a UserServiceException is thrown"))
+    @Test
+    void testCreateUser_whenSaveMethodThrowsException_thenThrowsUserServiceException() {
+        // Arrange
+        when(usersRepository.save(any(User.class))).thenThrow(RuntimeException.class);
+
+        // Act & Assert
+        assertThrows(UserServiceException.class, () -> {
+            userService.createUser(firstName, lastName, email, password, repeatedPassword);
+        }, "Should have thrown UserServiceException instead");
+
+        // Assert
     }
 
 
