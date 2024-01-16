@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -42,7 +43,7 @@ public class UserServiceTest {
     @Test
     void testCreateUser_whenUserDetailsProvided_returnsUserObject() {
         // Arrange
-        Mockito.when(usersRepository.save(Mockito.any(User.class))).thenReturn(true);
+        Mockito.when(usersRepository.save(any(User.class))).thenReturn(true);
 
         // Act
         User user = userService.createUser(firstName, lastName, email, password, repeatedPassword);
@@ -53,6 +54,8 @@ public class UserServiceTest {
         assertEquals(lastName, user.getLastName(), "User's last name isn't correct");
         assertEquals(email, user.getEmail(), "User's email isn't correct");
         assertNotNull(user.getId(), "User id is missing");
+        Mockito.verify(usersRepository)
+                .save(any(User.class));
     }
 
     @DisplayName("Empty first name causes correct exception")
