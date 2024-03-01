@@ -99,9 +99,5 @@ public class UserServiceTest {
         assertThrows(UserServiceException.class, () -> {
             userService.createUser(firstName, lastName, email, password, repeatedPassword);
         }, "Should have thrown UserServiceException instead");
-
-        // Assert
     }
-
-
 }
