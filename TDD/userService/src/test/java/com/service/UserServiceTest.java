@@ -23,6 +23,9 @@ public class UserServiceTest {
 
     @Mock
     UsersRepository usersRepository;
+    @Mock
+    EmailVerificationService emailVerificationService;
+
     String firstName;
     String lastName;
     String email;
@@ -99,5 +102,25 @@ public class UserServiceTest {
         assertThrows(UserServiceException.class, () -> {
             userService.createUser(firstName, lastName, email, password, repeatedPassword);
         }, "Should have thrown UserServiceException instead");
+    }
+
+    @Test
+    @DisplayName("EmailNotificationException is handled")
+    void testCreateUser_whenEmailNotificationExceptionThrown_throwsUserServiceException() {
+        // Arrange
+        when(usersRepository.save(any(User.class))).thenReturn(true);
+
+        doThrow(EmailNotificationServiceException.class)
+                .when(emailVerificationService)
+                .scheduleEmailConfirmation(any(User.class));
+
+        // Act & Assert
+        assertThrows(UserServiceException.class, () -> {
+            userService.createUser(firstName, lastName, email, password, repeatedPassword);
+        }, "Should have thrown UserServiceException instead");
+
+        // Assert
+        verify(emailVerificationService, times(1))
+                .scheduleEmailConfirmation(any(User.class));
     }
 }
