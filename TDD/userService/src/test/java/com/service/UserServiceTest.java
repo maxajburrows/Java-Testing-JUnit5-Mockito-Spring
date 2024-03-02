@@ -24,7 +24,7 @@ public class UserServiceTest {
     @Mock
     UsersRepository usersRepository;
     @Mock
-    EmailVerificationService emailVerificationService;
+    EmailVerificationServiceImpl emailVerificationService;
 
     String firstName;
     String lastName;
