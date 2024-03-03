@@ -1,0 +1,9 @@
+com/service/UserServiceImpl.class
+com/service/EmailVerificationService.class
+com/service/UserServiceException.class
+com/service/EmailVerificationServiceImpl.class
+com/data/UsersRepository.class
+com/service/EmailNotificationServiceException.class
+com/service/UserService.class
+com/model/User.class
+com/data/UsersRepositoryImpl.class
