@@ -53,5 +53,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-
+    public void demoMethod() {
+        System.out.println("Demo method");
+    }
 }
