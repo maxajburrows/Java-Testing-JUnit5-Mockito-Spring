@@ -1,0 +1,7 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+UserService,com.service,EmailVerificationServiceImpl,3,4,0,0,1,2,1,1,1,1
+UserService,com.service,UserServiceImpl,9,69,3,7,3,19,4,4,1,2
+UserService,com.service,UserServiceException,0,4,0,0,0,2,0,1,0,1
+UserService,com.service,EmailNotificationServiceException,4,0,0,0,2,0,1,0,1,0
+UserService,com.model,User,0,27,0,0,0,10,0,5,0,5
+UserService,com.data,UsersRepositoryImpl,25,0,2,0,6,0,3,0,2,0
