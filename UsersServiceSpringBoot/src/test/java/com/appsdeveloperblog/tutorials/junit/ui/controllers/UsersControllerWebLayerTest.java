@@ -7,6 +7,7 @@ import com.appsdeveloperblog.tutorials.junit.ui.request.UserDetailsRequestModel;
 import com.appsdeveloperblog.tutorials.junit.ui.response.UserRest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -41,35 +42,35 @@ public class UsersControllerWebLayerTest {
     @MockBean
     //@Autowired
     UsersService usersService;
+    UserDetailsRequestModel userDetailsRequestModel;
+    RequestBuilder requestBuilder;
+    MvcResult mvcResult;
+    @BeforeEach
+    void setUp() throws Exception {
+        userDetailsRequestModel = new UserDetailsRequestModel();
+        userDetailsRequestModel.setLastName("Burrows");
+        userDetailsRequestModel.setEmail("email@test.com");
+        userDetailsRequestModel.setPassword("12345678");
+        userDetailsRequestModel.setRepeatPassword("12345678");
+    }
 
     @Test
     @DisplayName("User can be created")
     void testCreateUser_whenValidUserDetailsProvided_returnsCreatedUserDetails() throws Exception {
         // Arrange
-        UserDetailsRequestModel userDetailsRequestModel = new UserDetailsRequestModel();
         userDetailsRequestModel.setFirstName("Max");
-        userDetailsRequestModel.setLastName("Burrows");
-        userDetailsRequestModel.setEmail("email@test.com");
-        userDetailsRequestModel.setPassword("12345678");
-        userDetailsRequestModel.setRepeatPassword("12345678");
 
-//        UserDto userDto = new UserDto();
-//        userDto.setFirstName("Max");
-//        userDto.setLastName("Burrows");
-//        userDto.setEmail("email");
-//        userDto.setUserId(UUID.randomUUID().toString());
-
-        UserDto userDto = new ModelMapper().map(userDetailsRequestModel, UserDto.class);
-        userDto.setUserId(UUID.randomUUID().toString());
-        when(usersService.createUser(any(UserDto.class))).thenReturn(userDto);
-
-        RequestBuilder requestBuilder =  MockMvcRequestBuilders.post("/users")
+        requestBuilder =  MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(userDetailsRequestModel));
 
+        UserDto userDto = new ModelMapper().map(userDetailsRequestModel, UserDto.class);
+        userDto.setUserId(UUID.randomUUID().toString());
+        when(usersService.createUser(any(UserDto.class))).thenReturn(userDto);
+        mvcResult = mockMvc.perform(requestBuilder).andReturn();
+
         // Act
-        MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
         String responseBodyAsString = mvcResult.getResponse().getContentAsString();
         UserRest createdUser = new ObjectMapper()
                 .readValue(responseBodyAsString, UserRest.class);
@@ -88,14 +89,9 @@ public class UsersControllerWebLayerTest {
     @DisplayName("First name is not empty")
     void testCreateUser_whenFirstNameIsNotProvided_returns400StatusCode() throws Exception {
         // Arrange
-        UserDetailsRequestModel userDetailsRequestModel = new UserDetailsRequestModel();
         userDetailsRequestModel.setFirstName("");
-        userDetailsRequestModel.setLastName("Burrows");
-        userDetailsRequestModel.setEmail("email@test.com");
-        userDetailsRequestModel.setPassword("12345678");
-        userDetailsRequestModel.setRepeatPassword("12345678");
 
-        RequestBuilder requestBuilder =  MockMvcRequestBuilders.post("/users")
+        requestBuilder =  MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(userDetailsRequestModel));
@@ -113,14 +109,9 @@ public class UsersControllerWebLayerTest {
     @DisplayName("First name is correct length")
     void testCreateUser_whenFirstNameIsTooShort_returns400StatusCode() throws Exception {
         // Arrange
-        UserDetailsRequestModel userDetailsRequestModel = new UserDetailsRequestModel();
         userDetailsRequestModel.setFirstName("M");
-        userDetailsRequestModel.setLastName("Burrows");
-        userDetailsRequestModel.setEmail("email@test.com");
-        userDetailsRequestModel.setPassword("12345678");
-        userDetailsRequestModel.setRepeatPassword("12345678");
 
-        RequestBuilder requestBuilder =  MockMvcRequestBuilders.post("/users")
+        requestBuilder =  MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(userDetailsRequestModel));
