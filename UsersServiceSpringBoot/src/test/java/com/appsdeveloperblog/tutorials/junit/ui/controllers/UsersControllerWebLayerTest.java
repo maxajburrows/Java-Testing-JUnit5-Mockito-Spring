@@ -42,9 +42,7 @@ public class UsersControllerWebLayerTest {
     @MockBean
     //@Autowired
     UsersService usersService;
-    UserDetailsRequestModel userDetailsRequestModel;
-    RequestBuilder requestBuilder;
-    MvcResult mvcResult;
+    private UserDetailsRequestModel userDetailsRequestModel;
     @BeforeEach
     void setUp() throws Exception {
         userDetailsRequestModel = new UserDetailsRequestModel();
@@ -60,7 +58,7 @@ public class UsersControllerWebLayerTest {
         // Arrange
         userDetailsRequestModel.setFirstName("Max");
 
-        requestBuilder =  MockMvcRequestBuilders.post("/users")
+        RequestBuilder requestBuilder =  MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(userDetailsRequestModel));
@@ -68,7 +66,7 @@ public class UsersControllerWebLayerTest {
         UserDto userDto = new ModelMapper().map(userDetailsRequestModel, UserDto.class);
         userDto.setUserId(UUID.randomUUID().toString());
         when(usersService.createUser(any(UserDto.class))).thenReturn(userDto);
-        mvcResult = mockMvc.perform(requestBuilder).andReturn();
+        MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
 
         // Act
         String responseBodyAsString = mvcResult.getResponse().getContentAsString();
@@ -91,7 +89,7 @@ public class UsersControllerWebLayerTest {
         // Arrange
         userDetailsRequestModel.setFirstName("");
 
-        requestBuilder =  MockMvcRequestBuilders.post("/users")
+        RequestBuilder requestBuilder =  MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(userDetailsRequestModel));
@@ -102,16 +100,16 @@ public class UsersControllerWebLayerTest {
         // Assert
         assertEquals(HttpStatus.BAD_REQUEST.value(),
                 mvcResult.getResponse().getStatus(),
-                "Incorrect HTTP Status Code returned");
+                "HTTP Status code is not set to 400");
     }
 
     @Test
     @DisplayName("First name is correct length")
-    void testCreateUser_whenFirstNameIsTooShort_returns400StatusCode() throws Exception {
+    void testCreateUser_whenFirstNameIsOnlyOneCharacter_returns400StatusCode() throws Exception {
         // Arrange
         userDetailsRequestModel.setFirstName("M");
 
-        requestBuilder =  MockMvcRequestBuilders.post("/users")
+        RequestBuilder requestBuilder =  MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(userDetailsRequestModel));
@@ -122,6 +120,6 @@ public class UsersControllerWebLayerTest {
         // Assert
         assertEquals(HttpStatus.BAD_REQUEST.value(),
                 mvcResult.getResponse().getStatus(),
-                "Incorrect HTTP Status Code returned");
+                "HTTP Status code is not set to 400");
     }
 }
