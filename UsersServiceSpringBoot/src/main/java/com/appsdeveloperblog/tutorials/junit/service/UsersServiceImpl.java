@@ -50,7 +50,7 @@ public class UsersServiceImpl implements UsersService {
 
         UserEntity storedUserDetails = usersRepository.save(userEntity);
 
-        UserDto returnValue  = modelMapper.map(storedUserDetails, UserDto.class);
+        UserDto returnValue = modelMapper.map(storedUserDetails, UserDto.class);
 
         return returnValue;
     }
