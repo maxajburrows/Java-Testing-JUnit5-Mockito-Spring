@@ -108,4 +108,29 @@ public class UsersControllerWebLayerTest {
                 mvcResult.getResponse().getStatus(),
                 "Incorrect HTTP Status Code returned");
     }
+
+    @Test
+    @DisplayName("First name is correct length")
+    void testCreateUser_whenFirstNameIsTooShort_returns400StatusCode() throws Exception {
+        // Arrange
+        UserDetailsRequestModel userDetailsRequestModel = new UserDetailsRequestModel();
+        userDetailsRequestModel.setFirstName("M");
+        userDetailsRequestModel.setLastName("Burrows");
+        userDetailsRequestModel.setEmail("email@test.com");
+        userDetailsRequestModel.setPassword("12345678");
+        userDetailsRequestModel.setRepeatPassword("12345678");
+
+        RequestBuilder requestBuilder =  MockMvcRequestBuilders.post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(userDetailsRequestModel));
+
+        // Act
+        MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST.value(),
+                mvcResult.getResponse().getStatus(),
+                "Incorrect HTTP Status Code returned");
+    }
 }
