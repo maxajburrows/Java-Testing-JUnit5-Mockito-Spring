@@ -1,5 +1,8 @@
 package com.appsdeveloperblog.tutorials.junit.ui.controllers;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,8 +22,20 @@ public class UsersControllerIntegrationTest {
     private int localServerPort;
 
     @Test
-    void contextLoads() {
-        System.out.println("server.port=" + serverPort);
-        System.out.println("local server port = " + localServerPort);
+    @DisplayName("User can be created")
+    void testCreateUser_whenValidDetailsProvided_returnsUserDetails() throws JSONException {
+        // Arrange
+        JSONObject userDetailsRequestJson = new JSONObject();
+        userDetailsRequestJson.put("firstName", "Max");
+        userDetailsRequestJson.put("lastName", "Burrows");
+        userDetailsRequestJson.put("email", "test@test.com");
+        userDetailsRequestJson.put("password", "12345678");
+        userDetailsRequestJson.put("repeatPassword", "12345678");
+
+
+        // Act
+
+        // Assert
     }
+
 }
