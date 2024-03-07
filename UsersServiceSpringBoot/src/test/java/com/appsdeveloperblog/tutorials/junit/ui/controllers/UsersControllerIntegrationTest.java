@@ -1,5 +1,6 @@
 package com.appsdeveloperblog.tutorials.junit.ui.controllers;
 
+import com.appsdeveloperblog.tutorials.junit.security.SecurityConstants;
 import com.appsdeveloperblog.tutorials.junit.ui.response.UserRest;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,8 +18,7 @@ import org.springframework.test.context.TestPropertySource;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -95,4 +95,27 @@ public class UsersControllerIntegrationTest {
                 "HTTP Status code 403 forbidden should have been returned");
     }
 
+    @Test
+    @DisplayName("/login works")
+    void testUserLogin_whenValidCredentialsProvided_returnsJWTinAuthorizationHeader() throws JSONException {
+        // Arrange
+        JSONObject loginCredentials = new JSONObject();
+        loginCredentials.put("email", "test@test.com");
+        loginCredentials.put("password", "12345678");
+
+        HttpEntity<String> request = new HttpEntity<>(loginCredentials.toString());
+
+        // Act
+        ResponseEntity response = testRestTemplate.postForEntity("/users/login",
+                request,
+                null);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode(),
+                "HTTP Status code should be 200");
+        assertNotNull(response.getHeaders().getValuesAsList(SecurityConstants.HEADER_STRING).get(0),
+                "Response should contain Authorization header with JWT");
+        assertNotNull(response.getHeaders().getValuesAsList("UserID").get(0),
+                "Response should contain UserID in a response header");
+    }
 }
