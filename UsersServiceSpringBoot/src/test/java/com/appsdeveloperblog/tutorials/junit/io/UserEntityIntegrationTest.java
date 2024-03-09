@@ -1,7 +1,6 @@
 package com.appsdeveloperblog.tutorials.junit.io;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -17,11 +16,13 @@ public class UserEntityIntegrationTest {
     @Autowired
     private TestEntityManager testEntityManager;
     UserEntity userEntity;
+    String userId;
 
     @BeforeEach
     void setUp() {
         userEntity = new UserEntity();
-        userEntity.setUserId(UUID.randomUUID().toString());
+        userId = UUID.randomUUID().toString();
+        userEntity.setUserId(userId);
         userEntity.setFirstName("Max");
         userEntity.setLastName("Burrows");
         userEntity.setEmail("test@test.com");
@@ -29,6 +30,7 @@ public class UserEntityIntegrationTest {
     }
 
     @Test
+    @Order(1)
     void testUserEntity_whenValidUserDetailsProvided_shouldReturnStoredUserDetails() {
         // Act
         UserEntity storedUserEntity = testEntityManager.persistAndFlush(userEntity);
@@ -50,6 +52,22 @@ public class UserEntityIntegrationTest {
         // Assert & Act
         assertThrows(PersistenceException.class, ()->{
             testEntityManager.persistAndFlush(userEntity);
+        }, "Was expecting a PersistenceException to be thrown.");
+    }
+
+    @Test
+    void testUserEntity_whenUserIdIsDuplicated_shouldThrowException() {
+        testEntityManager.persistAndFlush(userEntity);
+
+        UserEntity duplicateEntity = new UserEntity();
+        duplicateEntity.setUserId(userId);
+        duplicateEntity.setFirstName("Amelia");
+        duplicateEntity.setLastName("Burrows");
+        duplicateEntity.setEmail("test2@test.com");
+        duplicateEntity.setEncryptedPassword("1234");
+
+        assertThrows(PersistenceException.class, ()->{
+            testEntityManager.persistAndFlush(duplicateEntity);
         }, "Was expecting a PersistenceException to be thrown.");
     }
 }
