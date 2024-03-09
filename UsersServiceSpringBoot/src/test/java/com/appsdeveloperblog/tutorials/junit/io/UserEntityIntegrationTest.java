@@ -56,7 +56,7 @@ public class UserEntityIntegrationTest {
     }
 
     @Test
-    void testUserEntity_whenUserIdIsDuplicated_shouldThrowException() {
+    void testUserEntity_whenExistingUserIdProvided_shouldThrowException() {
         testEntityManager.persistAndFlush(userEntity);
 
         UserEntity duplicateEntity = new UserEntity();
